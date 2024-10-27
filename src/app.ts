@@ -12,8 +12,10 @@ import { authLimiter } from "./modules/utils";
 import { ApiError, errorConverter, errorHandler } from "./modules/errors";
 import routes from "./routes/v1";
 import { jwtStrategy } from "./modules/auth";
+import markExpiredTodosAsCompleted from "./modules/crons/todoCron";
 
 const app: Express = express();
+markExpiredTodosAsCompleted();
 
 if (config.env !== "test") {
   app.use(morgan.successHandler);
