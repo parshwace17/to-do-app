@@ -2,6 +2,7 @@ import express, { Router } from "express";
 import authRoute from "./auth.route";
 import docsRoute from "./swagger.route";
 import config from "../../config/config";
+import todoRoute from "./todo.route";
 
 const router = express.Router();
 
@@ -14,6 +15,10 @@ const defaultIRoute: IRoute[] = [
   {
     path: "/auth",
     route: authRoute,
+  },
+  {
+    path: "/todos", // Add the path for your todo routes
+    route: todoRoute, // Connect the todo route
   },
 ];
 

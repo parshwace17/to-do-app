@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
-import { ITodoDoc } from "./todo.interfaces";
+import { ITodoDoc, ITodoModel } from "./todo.interfaces";
+import { toJSON } from "../toJSON";
+import paginate from "../paginate/paginate";
 
-const todoSchema = new mongoose.Schema<ITodoDoc>(
+const todoSchema = new mongoose.Schema<ITodoDoc, ITodoModel>(
   {
     title: {
       type: String,
@@ -31,8 +33,10 @@ const todoSchema = new mongoose.Schema<ITodoDoc>(
     timestamps: true, // Automatically manage createdAt and updatedAt fields
   }
 );
+todoSchema.plugin(toJSON);
+todoSchema.plugin(paginate);
 
 // Create the Todo model
-const Todo = mongoose.model<ITodoDoc>("Todo", todoSchema);
+const Todo = mongoose.model<ITodoDoc, ITodoModel>("Todo", todoSchema);
 
 export default Todo;
