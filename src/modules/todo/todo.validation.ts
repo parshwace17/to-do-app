@@ -6,7 +6,7 @@ const createTodoBody: Record<keyof NewCreatedTodo, any> = {
   title: Joi.string().required(),
   description: Joi.string().required(),
   dueDate: Joi.date().required(),
-  user: Joi.string().custom(objectId).required(), // Assuming user is an ObjectId reference
+  user: Joi.string().custom(objectId).optional(), // Assuming user is an ObjectId reference
 };
 
 export const createTodo = {

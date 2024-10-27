@@ -42,6 +42,19 @@ export const getTodoById = async (
 };
 
 /**
+ * Get todo by id and user
+ * @param {mongoose.Types.ObjectId} id - Todo ID
+ * @param {mongoose.Types.ObjectId} userId - User ID
+ * @returns {Promise<ITodoDoc | null>}
+ */
+export const getTodoByIdAndUser = async (
+  id: mongoose.Types.ObjectId,
+  userId: mongoose.Types.ObjectId
+): Promise<ITodoDoc | null> => {
+  return Todo.findOne({ _id: id, user: userId });
+};
+
+/**
  * Update todo by id
  * @param {mongoose.Types.ObjectId} todoId
  * @param {Partial<ITodoDoc>} updateBody
