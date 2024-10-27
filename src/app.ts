@@ -10,6 +10,8 @@ import config from "./config/config";
 import { morgan } from "./modules/logger";
 import { authLimiter } from "./modules/utils";
 import { ApiError, errorConverter, errorHandler } from "./modules/errors";
+import routes from "./routes/v1";
+import { jwtStrategy } from "./modules/auth";
 
 const app: Express = express();
 
@@ -40,11 +42,18 @@ app.use(compression());
 
 // jwt authentication
 app.use(passport.initialize());
+passport.use("jwt", jwtStrategy);
+
+// jwt authentication
+app.use(passport.initialize());
 
 // limit repeated failed requests to auth endpoints
 if (config.env === "production") {
   app.use("/v1/auth", authLimiter);
 }
+
+// v1 api routes
+app.use("/v1", routes);
 
 // send back a 404 error for any unknown api request
 app.use((_req, _res, next) => {
