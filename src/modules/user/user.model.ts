@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
+import toJSON from "../toJSON/toJSON";
+import paginate from "../paginate/paginate";
 import { IUserDoc, IUserModel } from "./user.interfaces";
-import { toJSON } from "../toJSON";
 
 const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
   {
@@ -32,13 +33,6 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
       },
       private: true, // used by the toJSON plugin
     },
-    refreshTokens: [
-      {
-        // Store multiple refresh tokens
-        token: { type: String, required: true },
-        createdAt: { type: Date, expires: "7d", default: Date.now }, // Optional: Automatically delete after a certain period
-      },
-    ],
   },
   {
     timestamps: true,
@@ -47,6 +41,7 @@ const userSchema = new mongoose.Schema<IUserDoc, IUserModel>(
 
 // add plugin that converts mongoose to json
 userSchema.plugin(toJSON);
+userSchema.plugin(paginate);
 
 /**
  * Check if email is taken

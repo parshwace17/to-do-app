@@ -1,25 +1,34 @@
-import mongoose, { Document, Model } from "mongoose";
+import mongoose, { Model, Document } from "mongoose";
+import { QueryResult } from "../paginate/paginate";
+import { AccessAndRefreshTokens } from "../token/token.interfaces";
 
-export interface IRefreshToken {
-  token: string;
-  createdAt: Date;
-}
-
-export interface IUserDoc extends Document {
-  name: string;
+export interface IUser {
   email: string;
   password: string;
-  refreshTokens: IRefreshToken[];
-  isEmailVerified: boolean;
-  role: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+}
+
+export interface IUserDoc extends IUser, Document {
+  isPasswordMatch(password: string): Promise<boolean>;
 }
 
 export interface IUserModel extends Model<IUserDoc> {
   isEmailTaken(
     email: string,
-    excludeUserId: mongoose.ObjectId
+    excludeUserId?: mongoose.Types.ObjectId
   ): Promise<boolean>;
-  // Add any other static methods you need here
+  paginate(
+    filter: Record<string, any>,
+    options: Record<string, any>
+  ): Promise<QueryResult>;
+}
+
+export type UpdateUserBody = Partial<IUser>;
+
+export type NewRegisteredUser = Omit<IUser, "role" | "isEmailVerified">;
+
+export type NewCreatedUser = Omit<IUser, "isEmailVerified">;
+
+export interface IUserWithTokens {
+  user: IUserDoc;
+  tokens: AccessAndRefreshTokens;
 }
