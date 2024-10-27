@@ -7,7 +7,7 @@ import { logger } from "../logger";
 import ApiError from "./ApiError";
 
 export const errorConverter = (
-  err: any,
+  err,
   _req: Request,
   _res: Response,
   next: NextFunction

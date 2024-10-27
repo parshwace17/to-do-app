@@ -8,6 +8,7 @@ import { IOptions } from "../paginate/paginate";
 import * as todoService from "./todo.service";
 
 export const createTodo = catchAsync(async (req: Request, res: Response) => {
+  req.body.user = req.user["_id"];
   const todo = await todoService.createTodo(req.body);
   res.status(httpStatus.CREATED).send(todo);
 });
@@ -20,14 +21,16 @@ export const getTodos = catchAsync(async (req: Request, res: Response) => {
     "page",
     "projectBy",
   ]);
+  filter.user = req.user["_id"].toString();
   const result = await todoService.queryTodos(filter, options);
   res.send(result);
 });
 
 export const getTodo = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.params["todoId"] === "string") {
-    const todo = await todoService.getTodoById(
-      new mongoose.Types.ObjectId(req.params["todoId"])
+    const todo = await todoService.getTodoByIdAndUser(
+      new mongoose.Types.ObjectId(req.params["todoId"]),
+      req.user["_id"]
     );
     if (!todo) {
       throw new ApiError(httpStatus.NOT_FOUND, "Todo not found");
@@ -38,19 +41,30 @@ export const getTodo = catchAsync(async (req: Request, res: Response) => {
 
 export const updateTodo = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.params["todoId"] === "string") {
+    const todoExist = await todoService.getTodoByIdAndUser(
+      new mongoose.Types.ObjectId(req.params["todoId"]),
+      req.user["_id"]
+    );
+    if (!todoExist) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Todo not found");
+    }
     const todo = await todoService.updateTodoById(
       new mongoose.Types.ObjectId(req.params["todoId"]),
       req.body
     );
-    if (!todo) {
-      throw new ApiError(httpStatus.NOT_FOUND, "Todo not found");
-    }
     res.send(todo);
   }
 });
 
 export const deleteTodo = catchAsync(async (req: Request, res: Response) => {
   if (typeof req.params["todoId"] === "string") {
+    const todoExist = await todoService.getTodoByIdAndUser(
+      new mongoose.Types.ObjectId(req.params["todoId"]),
+      req.user["_id"]
+    );
+    if (!todoExist) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Todo not found");
+    }
     await todoService.deleteTodoById(
       new mongoose.Types.ObjectId(req.params["todoId"])
     );

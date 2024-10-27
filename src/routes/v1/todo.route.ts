@@ -57,14 +57,10 @@ export default router;
  *               dueDate:
  *                 type: string
  *                 format: date-time
- *               user:
- *                 type: string
- *                 format: objectId
  *             example:
  *               title: "My first todo"
  *               description: "This is the description of my todo."
  *               dueDate: "2024-10-31"
- *               user: "5ebac534954b54139806c112"
  *     responses:
  *       "201":
  *         description: Created

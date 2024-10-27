@@ -1,16 +1,18 @@
 /**
  * Create an object composed of the picked object properties
- * @param {Record<string, any>} object
- * @param {string[]} keys
- * @returns {Object}
+ * @param {T} object - The source object
+ * @param {Array<keyof T>} keys - Array of keys to pick from the source object
+ * @returns {Partial<T>} - A new object with only the picked properties
  */
-const pick = (object: Record<string, any>, keys: string[]) =>
-  keys.reduce((obj: any, key: string) => {
-    if (object && Object.prototype.hasOwnProperty.call(object, key)) {
-      // eslint-disable-next-line no-param-reassign
-      obj[key] = object[key];
+const pick = <T extends Record<string, unknown>>(
+  object: T,
+  keys: Array<keyof T>
+): Partial<T> =>
+  keys.reduce((result, key) => {
+    if (key in object) {
+      result[key] = object[key];
     }
-    return obj;
-  }, {});
+    return result;
+  }, {} as Partial<T>);
 
 export default pick;

@@ -39,13 +39,10 @@ const paginate = <T extends Document>(schema: Schema<T>): void => {
    */
   schema.static(
     "paginate",
-    async function (
-      filter: Record<string, any>,
-      options: IOptions
-    ): Promise<QueryResult> {
+    async function (filter, options: IOptions): Promise<QueryResult> {
       let sort: string = "";
       if (options.sortBy) {
-        const sortingCriteria: any = [];
+        const sortingCriteria = [];
         options.sortBy.split(",").forEach((sortOption: string) => {
           const [key, order] = sortOption.split(":");
           sortingCriteria.push((order === "desc" ? "-" : "") + key);
