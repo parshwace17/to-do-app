@@ -6,7 +6,7 @@
       "node_args": "--experimental-modules --es-module-specifier-resolution=node",
       "instances": 1,
       "autorestart": true,
-      "watch": false,
+      "watch": true,
       "time": true,
       "env": {
         "NODE_ENV": "development"

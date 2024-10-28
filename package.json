@@ -6,13 +6,27 @@
   "type": "commonjs",
   "scripts": {
     "start": "pm2 start ecosystem.config.json --no-daemon",
-    "start:build": "tsc --build && pm2 start ecosystem.config.json --no-daemon",
-    "compile": "tsc --build",
+    "start: build": "npm run build && pm2 start ecosystem.config.json --no-daemon",
+    "build": "tsc --build",
     "compile:watch": "tsc --build --watch",
-    "docker:prod": "docker-compose -f docker-compose.yml up"
+    "docker:prod": "docker-compose up --build",
+    "docker:build:prod": "npm run build && docker-compose up --build"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "node",
+    "typescript",
+    "node.js",
+    "express",
+    "rest",
+    "api",
+    "mongodb",
+    "mongoose",
+    "es6",
+    "docker",
+    "passport",
+    "joi"
+  ],
+  "author": "parshwace17",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
